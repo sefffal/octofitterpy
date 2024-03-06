@@ -34,7 +34,7 @@ jobs:
         os: [ubuntu-latest]
         test-id: [main]
         include:
-          - julia-version: '1.6'
+          - julia-version: '1.10'
             python-version: '3.8'
             os: ubuntu-latest
             test-id: include
@@ -79,7 +79,7 @@ jobs:
         include:
           - os: ubuntu-latest
             python-version: '3.8'
-            julia-version: '1.6'
+            julia-version: '1.10'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
