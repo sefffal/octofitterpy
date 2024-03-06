@@ -1,0 +1,11 @@
+*.png
+*.fits
+**/__pycache__
+build
+dist
+*.vs/*
+*.pyproj
+**/.DS_Store
+**/*.code-workspace
+**/*.tar.gz
+venv

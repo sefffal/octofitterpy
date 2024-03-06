@@ -1,0 +1,129 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'test/**'
+      - 'octofitterpy/**'
+      - '.github/workflows/CI.yml'
+      - 'setup.py'
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - '*'
+    paths:
+      - 'test/**'
+      - 'octofitterpy/**'
+      - '.github/workflows/CI.yml'
+      - 'setup.py'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        julia-version: ['1']
+        python-version: ['3.11']
+        os: [ubuntu-latest]
+        test-id: [main]
+        include:
+          - julia-version: '1.6'
+            python-version: '3.8'
+            os: ubuntu-latest
+            test-id: include
+          - julia-version: '1'
+            python-version: '3.12'
+            os: ubuntu-latest
+            test-id: include
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Set up Julia"
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.julia-version }}
+      - name: "Cache Julia"
+        uses: julia-actions/cache@v1
+        with:
+          cache-name: ${{ matrix.os }}-test-${{ matrix.julia-version }}-${{ matrix.python-version }}
+          cache-packages: false
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: "Install octofitterpy"
+        run: |
+            python -m pip install --upgrade pip
+            pip install .
+            python -c 'import octofitterpy'
+      - name: "Assert Julia version"
+        if: ${{ matrix.julia-version != '1'}}
+        run: python3 -c "from octofitterpy import jl; assert jl.VERSION.major == jl.seval('v\"${{ matrix.julia-version }}\"').major; assert jl.VERSION.minor == jl.seval('v\"${{ matrix.julia-version }}\"').minor"
+
+
+  dev_install:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: ['3.11']
+        julia-version: ['1']
+        include:
+          - os: ubuntu-latest
+            python-version: '3.8'
+            julia-version: '1.6'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: "Install octofitterpy"
+        run: |
+            python -m pip install --upgrade pip
+            pip install .
+      - name: "Run development test"
+        run: OCTOFITTERPY_TEST_JULIA_VERSION=${{ matrix.julia-version }} OCTOFITTERPY_TEST_PYTHON_VERSION=${{ matrix.python-version }} python -m octofitterpy test dev
+
+  conda_test:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        python-version: ['3.11']
+        os: ['ubuntu-latest']
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Cache conda"
+        uses: actions/cache@v4
+        env:
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+      - name: "Set up Conda"
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          auto-activate-base: true
+          python-version: ${{ matrix.python-version }}
+          activate-environment: octofitterpy-test
+          environment-file: environment.yml
+      - name: "Cache Julia"
+        uses: julia-actions/cache@v1
+        with:
+          cache-name: ${{ matrix.os }}-conda-${{ matrix.python-version }}
+          cache-packages: false
+      - name: "Install Octofitterpy"
+        run: |
+            python3 -m pip install .
+            python3 -c 'import octofitterpy'
