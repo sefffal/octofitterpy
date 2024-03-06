@@ -11,6 +11,7 @@ gaia_plx = Octofitter.gaia_plx
 HGCALikelihood = Octofitter.HGCALikelihood
 LogDensityModel = Octofitter.LogDensityModel
 octofit = Octofitter.octofit
+octoquick = Octofitter.octoquick
 loadchain = Octofitter.loadchain
 savechain = Octofitter.savechain
 mjd = Octofitter.mjd
@@ -55,7 +56,7 @@ def System(
     expr = f"""
         @system {name} begin
             {priors}
-        end (_plnt...)
+        end (_obs...) (_plnt...)
     """
     # _plnt
     sys = jl.seval(expr)
@@ -88,6 +89,10 @@ def octocorner(*args, **kwargs):
         jl.Main.Makie.save(fname, fig)
         from IPython.display import Image
         return Image(filename=fname) 
+
+def octofit_pigeons(*args, **kwargs):
+    jl.seval("using Pigeons")
+    return Octofitter.octofit_pigeons(*args, **kwargs)
 
 def isipynb():
     try:
