@@ -32,13 +32,13 @@ jobs:
       - name: "Get Octofitter.jl version used in octtofitterpy"
         id: get-current
         run: |
-          echo "version=$(python -c 'import octofitterpy; print(octofitterpy.version.__symbolic_regression_jl_version__)' 2>/dev/null)" >> $GITHUB_OUTPUT
+          echo "version=$(python -c 'import octofitterpy; print(octofitterpy.version.__octofitter_jl_version__)' 2>/dev/null)" >> $GITHUB_OUTPUT
 
       # If versions are different, we want to take our checked-out version,
       # create a new branch called "update_compat_{...}", where the "..."
       # is a timestamp. We then want to
       # go to octofitterpy/version.py, bump the patch version of octtofitterpy (__version__),
-      # set the version of __symbolic_regression_jl_version__ to the latest
+      # set the version of __octofitter_jl_version__ to the latest
       # version of Octofitter.jl, and then commit and push.
       # Finally, we will open a PR from this branch to master.
       - name: "Update versions"
@@ -50,7 +50,7 @@ jobs:
           sed -i "s/^__version__ = .*/__version__ = \"$(python -c 'import octofitterpy; print(".".join(octofitterpy.version.__version__.split(".")[:-1]), end="")' 2>/dev/null).${NEW_OCTOFITTERPY_PATCH_VERSION}\"/" octofitterpy/version.py
 
           # Set Octofitter.jl version:
-          sed -i "s/^__symbolic_regression_jl_version__ = .*/__symbolic_regression_jl_version__ = \"${{ steps.get-latest.outputs.version }}\"/" octofitterpy/version.py
+          sed -i "s/^__octofitter_jl_version__ = .*/__octofitter_jl_version__ = \"${{ steps.get-latest.outputs.version }}\"/" octofitterpy/version.py
 
       - name: "Create PR"
         uses: peter-evans/create-pull-request@v6
