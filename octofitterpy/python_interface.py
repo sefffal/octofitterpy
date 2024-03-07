@@ -18,6 +18,9 @@ mjd = Octofitter.mjd
 mjd2date = Octofitter.mjd2date
 years2mjd = Octofitter.mjd2date
 
+# Expose some libraries to the user
+Distributions = jl.Distributions
+
 def Planet(
     name,
     basis,
@@ -79,6 +82,23 @@ def octoplot(*args, **kwargs):
         from IPython.display import Image
         return Image(filename=fname) 
 
+def plotchains(*args, **kwargs):
+    jl.seval("using Plots: Plots")
+    fig = Octofitter.plotchains(*args, **kwargs)
+    if isipynb():
+        fname = jl.tempname()+".png"
+        jl.Main.Plots.savefig(fig, fname)
+        from IPython.display import Image
+        return Image(filename=fname) 
+
+def plot(*args, **kwargs):
+    jl.seval("using Plots: Plots")
+    fig = jl.Plots.plot(*args, **kwargs)
+    if isipynb():
+        fname = jl.tempname()+".png"
+        jl.Main.Plots.savefig(fig, fname)
+        from IPython.display import Image
+        return Image(filename=fname)
 
 def octocorner(*args, **kwargs):
     jl.seval("using CairoMakie: Makie")
@@ -97,10 +117,8 @@ def octofit_pigeons(*args, **kwargs):
 def isipynb():
     try:
         get_ipython = sys.modules["IPython"].get_ipython
-
         if "IPKernelApp" not in get_ipython().config:
             raise ImportError("console")
-
         return True
     except Exception:
         return False
