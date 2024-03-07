@@ -1,13 +1,13 @@
 name: large_nightly
 
-# This CI only runs once per day, but tries
+# This CI only runs once per week, but tries
 # many different configurations.
 
 on:
   schedule:
     # Run at the 0th minute of the 10th hour (UTC).
-    # This means the job will run at 5am EST.
-    - cron: "0 10 * * *"
+    # This means the job will run at 5am PST once per week.
+    - cron: "0 13 * * 1"
     # This will automatically run on master branch only.
   workflow_dispatch:
 
