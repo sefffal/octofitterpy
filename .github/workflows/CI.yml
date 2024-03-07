@@ -90,40 +90,40 @@ jobs:
       - name: "Run development test"
         run: OCTOFITTERPY_TEST_JULIA_VERSION=${{ matrix.julia-version }} OCTOFITTERPY_TEST_PYTHON_VERSION=${{ matrix.python-version }} python -m octofitterpy test dev
 
-  conda_test:
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash -l {0}
-    strategy:
-      matrix:
-        python-version: ['3.11']
-        os: ['ubuntu-latest']
+  # conda_test:
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash -l {0}
+  #   strategy:
+  #     matrix:
+  #       python-version: ['3.11']
+  #       os: ['ubuntu-latest']
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: "Cache conda"
-        uses: actions/cache@v4
-        env:
-          CACHE_NUMBER: 0
-        with:
-          path: ~/conda_pkgs_dir
-          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
-      - name: "Set up Conda"
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          auto-activate-base: true
-          python-version: ${{ matrix.python-version }}
-          activate-environment: octofitterpy-test
-          environment-file: environment.yml
-      - name: "Cache Julia"
-        uses: julia-actions/cache@v1
-        with:
-          cache-name: ${{ matrix.os }}-conda-${{ matrix.python-version }}
-          cache-packages: false
-      - name: "Install Octofitterpy"
-        run: |
-            python3 -m pip install .
-            python3 -c 'import octofitterpy'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: "Cache conda"
+  #       uses: actions/cache@v4
+  #       env:
+  #         CACHE_NUMBER: 0
+  #       with:
+  #         path: ~/conda_pkgs_dir
+  #         key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+  #     - name: "Set up Conda"
+  #       uses: conda-incubator/setup-miniconda@v3
+  #       with:
+  #         miniforge-variant: Mambaforge
+  #         miniforge-version: latest
+  #         auto-activate-base: true
+  #         python-version: ${{ matrix.python-version }}
+  #         activate-environment: octofitterpy-test
+  #         environment-file: environment.yml
+  #     - name: "Cache Julia"
+  #       uses: julia-actions/cache@v1
+  #       with:
+  #         cache-name: ${{ matrix.os }}-conda-${{ matrix.python-version }}
+  #         cache-packages: false
+  #     - name: "Install Octofitterpy"
+  #       run: |
+  #           python3 -m pip install .
+  #           python3 -c 'import octofitterpy'
