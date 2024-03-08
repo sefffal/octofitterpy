@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '00 00 * * *'
   workflow_dispatch:
+permissions:
+  pull-requests: write
+  contents: write
 jobs:
   update_compat:
     runs-on: ubuntu-latest
@@ -31,6 +34,7 @@ jobs:
           echo "version=$(git describe --tags --abbrev=0 | sed 's/^v//')"
 
       - name: "Get Octofitter.jl version used in octtofitterpy"
+        # TODO: we can probably just use a REGEX here to avoid having to install the whole julia packages and stack
         id: get-current
         run: |
           python -c 'import octofitterpy; print(octofitterpy.version.__octofitter_jl_version__)'
