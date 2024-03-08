@@ -60,7 +60,7 @@ model = octo.LogDensityModel(sys) # Compile model
 chain = octo.octofit(model) # Sample model
 octo.octoplot(model,chain) # Plot orbits
 octo.octocorner(model,chain,small=True) # Make corner plot
-octo.savechains("table.fits", chain)
+octo.savechain("table.fits", chain)
 ```
 
 ![](examples/HIP100123-plot-grid.png)
