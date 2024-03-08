@@ -1,20 +1,19 @@
 # octofitterpy
 
-octofitterpy is a python package for performing Bayesian inference 
+`octofitterpy` is a python package for performing Bayesian inference 
 against a wide variety of exoplanet / binary star data. It uses the [Octofitter.jl](https://sefffal.github.io/Octofitter.jl/)
 julia package under the hood (just like eg numpy uses C).
 
-octofitterpy can access almost all functionality of Octofitter.jl, but only a subset (relative and absolute astrometry fitting)
-have yet been given convenient wrappers.
+`octofitterpy` can access almost all functionality of Octofitter.jl. Currently a subset of this functionality including relative astrometry fitting, absolute astrometry fitting, and various plotting functions have been wrapped with convenient python functions. Remaining functionality can be accessed via the `octofitterpy.Octofitter` submodule.
 
-The extensive Julia documentation is available [here](https://sefffal.github.io/Octofitter.jl/).
-The `examples` directory and [demo notebook](https://github.com/sefffal/octofitterpy/blob/master/examples/demo.ipynb) provide examples in Python.
 
+The `examples` directory and [demo notebook](https://github.com/sefffal/octofitterpy/blob/master/examples/demo.ipynb) provide an introduction to using octofitter in Python.
+Extensive documentation and tutorials are available [here](https://sefffal.github.io/Octofitter.jl/) for the Julia version, and for the most part are directly translatable to Python.
 
 ![](examples/gallery.png)
 
 ## Installation
-In an anaconda based environment, run:
+In python 3.8 to 3.11 based environment, run:
 ```bash
 pip install -U octofitterpy
 ```
@@ -29,7 +28,7 @@ astrom_like = octo.PlanetRelAstromLikelihood(
     sep = [505.7,600.1],
     pa = [0.0,0.4,],
     σ_sep = [10,10],
-	σ_pa = [0.01,0.01],
+    σ_pa = [0.01,0.01],
     cor= [0,0.2]
 )
 planet_b = octo.Planet(
@@ -57,15 +56,15 @@ sys = octo.System(
     likelihoods=[],
     companions=[planet_b]
 )
-model = octo.LogDensityModel(sys)
-chain = octo.octofit(model)
-octo.octoplot(model,chain)
-octo.octocorner(model,chain,small=True)
+model = octo.LogDensityModel(sys) # Compile model
+chain = octo.octofit(model) # Sample model
+octo.octoplot(model,chain) # Plot orbits
+octo.octocorner(model,chain,small=True) # Make corner plot
+octo.savechains("table.fits", chain)
 ```
 
 ![](examples/HIP100123-plot-grid.png)
 ![](examples/HIP100123-pairplot-small.png)
-
 
 
 ## Read the paper
@@ -75,27 +74,27 @@ In addition to these documentation and tutorial pages, you can read the paper pu
 * If you use Octofitter in your work, please cite [Thompson et al](https://dx.doi.org/10.3847/1538-3881/acf5cc):
 ```bibtex
 @article{Thompson_2023,
-doi = {10.3847/1538-3881/acf5cc},
-url = {https://dx.doi.org/10.3847/1538-3881/acf5cc},
-year = {2023},
-month = {sep},
-publisher = {The American Astronomical Society},
-volume = {166},
-number = {4},
-pages = {164},
-author = {William Thompson and Jensen Lawrence and Dori Blakely and Christian Marois and Jason Wang and Mosé Giordano and Timothy Brandt and Doug Johnstone and Jean-Baptiste Ruffio and S. Mark Ammons and Katie A. Crotts and Clarissa R. Do Ó and Eileen C. Gonzales and Malena Rice},
-title = {Octofitter: Fast, Flexible, and Accurate Orbit Modeling to Detect Exoplanets},
-journal = {The Astronomical Journal},
+    doi = {10.3847/1538-3881/acf5cc},
+    url = {https://dx.doi.org/10.3847/1538-3881/acf5cc},
+    year = {2023},
+    month = {sep},
+    publisher = {The American Astronomical Society},
+    volume = {166},
+    number = {4},
+    pages = {164},
+    author = {William Thompson and Jensen Lawrence and Dori Blakely and Christian Marois and Jason Wang and Mosé Giordano and Timothy Brandt and Doug Johnstone and Jean-Baptiste Ruffio and S. Mark Ammons and Katie A. Crotts and Clarissa R. Do Ó and Eileen C. Gonzales and Malena Rice},
+    title = {Octofitter: Fast, Flexible, and Accurate Orbit Modeling to Detect Exoplanets},
+    journal = {The Astronomical Journal},
 }
 ```
 
 * If you use the pairplot functionality, please cite:
 ```
 @misc{Thompson2023,
-  author = {William Thompson},
-  title = {{PairPlots.jl} Beautiful and flexible visualizations of high dimensional data},
-  year = {2023},
-  howpublished = {\url{https://sefffal.github.io/PairPlots.jl/dev}},
+    author = {William Thompson},
+    title = {{PairPlots.jl} Beautiful and flexible visualizations of high dimensional data},
+    year = {2023},
+    howpublished = {\url{https://sefffal.github.io/PairPlots.jl/dev}},
 }
 ```
 
