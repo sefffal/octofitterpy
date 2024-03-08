@@ -78,4 +78,6 @@ jobs:
             It updates the backend version to v${{ steps.get-latest.outputs.version }}. For a full description of the changes, see the backend changelog: [v${{ steps.get-latest.outputs.version }}](https://github.com/sefffal/Octofitter.jl/releases/tag/v${{ steps.get-latest.outputs.version }}).
           delete-branch: true
           commit-message: "Update backend version to v${{ steps.get-latest.outputs.version }}"
-          add-paths: octofitterpy/version.py
+          add-paths: |
+            pyproject.toml
+            octofitterpy/juliapkg.json
