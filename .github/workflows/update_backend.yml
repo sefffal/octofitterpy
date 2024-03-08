@@ -28,6 +28,7 @@ jobs:
           git clone https://github.com/sefffal/Octofitter.jl
           cd Octofitter.jl
           echo "version=$(git describe --tags --abbrev=0 | sed 's/^v//')" >> $GITHUB_OUTPUT
+          echo "version=$(git describe --tags --abbrev=0 | sed 's/^v//')"
 
       - name: "Get Octofitter.jl version used in octtofitterpy"
         id: get-current
