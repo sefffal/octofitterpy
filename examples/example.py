@@ -78,4 +78,4 @@ octo.octoplot(model,chain)
 octo.octocorner(model,chain,small=True)
 
 ## Saving (use octo.loadchain to restore)
-octo.savechain(chain)
+octo.savechain("mychain.fits", chain)
