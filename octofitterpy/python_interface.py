@@ -18,6 +18,10 @@ mjd = Octofitter.mjd
 mjd2date = Octofitter.mjd2date
 years2mjd = Octofitter.mjd2date
 
+loadhdf5 = Octofitter.loadhdf5
+savehdf5 = Octofitter.savehdf5
+Whereistheplanet_astrom = Octofitter.Whereistheplanet_astrom
+
 # Expose some libraries to the user
 Distributions = jl.Distributions
 
