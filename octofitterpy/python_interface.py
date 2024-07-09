@@ -5,10 +5,11 @@ import sys
 
 # Inside Planet and System blocks, which are resolved in the Main module,
 # we need various names available to the user
-jl.seval("using Octofitter, Distributions")
+jl.seval("using Octofitter, Distributions, OctofitterRadialVelocity")
 
 gaia_plx = Octofitter.gaia_plx
 HGCALikelihood = Octofitter.HGCALikelihood
+HipparcosIADLikelihood = Octofitter.HipparcosIADLikelihood
 LogDensityModel = Octofitter.LogDensityModel
 octofit = Octofitter.octofit
 octoquick = Octofitter.octoquick
@@ -17,10 +18,14 @@ savechain = Octofitter.savechain
 mjd = Octofitter.mjd
 mjd2date = Octofitter.mjd2date
 years2mjd = Octofitter.mjd2date
+projectpositions = Octofitter.projectpositions
+pointwise_like = Octofitter.pointwise_like
 
 loadhdf5 = Octofitter.loadhdf5
 savehdf5 = Octofitter.savehdf5
 Whereistheplanet_astrom = Octofitter.Whereistheplanet_astrom
+
+ObsPriorAstromONeil2019 = Octofitter.ObsPriorAstromONeil2019
 
 # Expose some libraries to the user
 Distributions = jl.Distributions
@@ -74,35 +79,42 @@ def PlanetRelAstromLikelihood(**data):
         data[k] = jl_array(v)
     return Octofitter.PlanetRelAstromLikelihood(Octofitter.Table(**data))
 
+def PlanetRelativeRVLikelihood(**data):
+    for k,v in data.items():
+        data[k] = jl_array(v)
+    return OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data))
+
+def StarAbsoluteRVLikelihood(**data):
+    for k,v in data.items():
+        data[k] = jl_array(v)
+    return OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data))
+
+def PhotometryLikelihood(**data):
+    for k,v in data.items():
+        data[k] = jl_array(v)
+    return Octofitter.PhotometryLikelihood(Octofitter.Table(**data))
 
 # These functions require us to load a plotting backend, which is a little
 # slow. Only load it when we need it.
 def octoplot(*args, **kwargs):
-    jl.seval("using Plots: Plots")
+    jl.seval("using CairoMakie: Makie")
     fig = Octofitter.octoplot(*args, **kwargs)
     if isipynb():
         fname = jl.tempname()+".png"
-        jl.Main.Plots.savefig(fig, fname)
+        jl.Main.Makie.save(fname, fig)
         from IPython.display import Image
         return Image(filename=fname) 
 
-def plotchains(*args, **kwargs):
-    jl.seval("using Plots: Plots")
-    fig = Octofitter.plotchains(*args, **kwargs)
+# These functions require us to load a plotting backend, which is a little
+# slow. Only load it when we need it.
+def rvpostplot(*args, **kwargs):
+    jl.seval("using CairoMakie: Makie")
+    fig = Octofitter.rvpostplot(*args, **kwargs)
     if isipynb():
         fname = jl.tempname()+".png"
-        jl.Main.Plots.savefig(fig, fname)
+        jl.Main.Makie.save(fname, fig)
         from IPython.display import Image
         return Image(filename=fname) 
-
-def plot(*args, **kwargs):
-    jl.seval("using Plots: Plots")
-    fig = jl.Plots.plot(*args, **kwargs)
-    if isipynb():
-        fname = jl.tempname()+".png"
-        jl.Main.Plots.savefig(fig, fname)
-        from IPython.display import Image
-        return Image(filename=fname)
 
 def octocorner(*args, **kwargs):
     jl.seval("using CairoMakie: Makie")

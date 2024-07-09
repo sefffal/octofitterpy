@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "octofitterpy"
-version = "2.3.4"
+version = "3.0.0"
 authors = [
     {name = "William Thompson", email = "will.thompson@outlook.com"},
 ]
