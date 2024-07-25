@@ -61,5 +61,6 @@ elif autoload_extensions not in {"no", "yes", ""}:
         "OCTOFITTERPY_AUTOLOAD_EXTENSIONS environment variable is set to something other than 'yes' or 'no' or ''."
     )
 
-jl.seval("using Octofitter")
+jl.seval("using Octofitter, OctofitterRadialVelocity")
 Octofitter = jl.Octofitter
+OctofitterRadialVelocity = jl.OctofitterRadialVelocity
