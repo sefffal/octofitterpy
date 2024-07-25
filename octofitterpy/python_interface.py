@@ -17,14 +17,14 @@ loadchain = Octofitter.loadchain
 savechain = Octofitter.savechain
 mjd = Octofitter.mjd
 mjd2date = Octofitter.mjd2date
-years2mjd = Octofitter.mjd2date
+years2mjd = Octofitter.years2mjd
 projectpositions = Octofitter.projectpositions
 pointwise_like = Octofitter.pointwise_like
+KDEDist = Octofitter.KDEDist
 
 loadhdf5 = Octofitter.loadhdf5
 savehdf5 = Octofitter.savehdf5
 Whereistheplanet_astrom = Octofitter.Whereistheplanet_astrom
-
 ObsPriorAstromONeil2019 = Octofitter.ObsPriorAstromONeil2019
 
 # Expose some libraries to the user
@@ -82,12 +82,12 @@ def PlanetRelAstromLikelihood(**data):
 def PlanetRelativeRVLikelihood(**data):
     for k,v in data.items():
         data[k] = jl_array(v)
-    return OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data))
+    return jl.OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data))
 
 def StarAbsoluteRVLikelihood(**data):
     for k,v in data.items():
         data[k] = jl_array(v)
-    return OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data))
+    return jl.OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data))
 
 def PhotometryLikelihood(**data):
     for k,v in data.items():
@@ -129,6 +129,11 @@ def octocorner(*args, **kwargs):
 def octofit_pigeons(*args, **kwargs):
     jl.seval("using Pigeons")
     return Octofitter.octofit_pigeons(*args, **kwargs)
+
+def increment_n_chains(pt, extra_rounds):
+    jl.seval("using Pigeons")
+    return jl.Pigeons.increment_n_rounds_b(pt, extra_rounds)
+
 
 def isipynb():
     try:
