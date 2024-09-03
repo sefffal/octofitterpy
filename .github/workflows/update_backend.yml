@@ -74,7 +74,7 @@ jobs:
           cat octofitterpy/juliapkg.json
 
       - name: "Create PR"
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           title: "Automated update to backend: v${{ steps.get-latest.outputs.version }}"
           body: |
