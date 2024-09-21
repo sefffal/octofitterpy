@@ -3,7 +3,7 @@
     "packages": {
         "Octofitter": {
             "uuid": "daf3887e-d01a-44a1-9d7e-98f15c5d69c9",
-            "version": "=3.1.0"
+            "version": "=4.0.0"
         },
         "OctofitterRadialVelocity": {
             "uuid": "c6a353d9-c9c1-48aa-9c23-64f4679bd07d",
