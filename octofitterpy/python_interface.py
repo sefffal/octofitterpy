@@ -79,15 +79,15 @@ def PlanetRelAstromLikelihood(**data):
         data[k] = jl_array(v)
     return Octofitter.PlanetRelAstromLikelihood(Octofitter.Table(**data))
 
-def PlanetRelativeRVLikelihood(**data):
+def PlanetRelativeRVLikelihood(instrument_names=None, **data):
     for k,v in data.items():
         data[k] = jl_array(v)
-    return jl.OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data))
+    return jl.OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data), instrument_names=instrument_names)
 
-def StarAbsoluteRVLikelihood(**data):
+def StarAbsoluteRVLikelihood(instrument_names=None, **data):
     for k,v in data.items():
         data[k] = jl_array(v)
-    return jl.OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data))
+    return jl.OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data), instrument_names=instrument_names)
 
 def PhotometryLikelihood(**data):
     for k,v in data.items():
