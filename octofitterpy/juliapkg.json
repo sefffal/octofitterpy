@@ -1,29 +1,29 @@
 {
-    "julia": "^1.10",
+    "julia": "~1.10",
     "packages": {
         "Octofitter": {
             "uuid": "daf3887e-d01a-44a1-9d7e-98f15c5d69c9",
-            "version": "=4.0.0"
+            "version": "=5.0.0"
         },
         "OctofitterRadialVelocity": {
             "uuid": "c6a353d9-c9c1-48aa-9c23-64f4679bd07d",
-            "version": "=4.0.0"
+            "version": "=5.0.0"
         },
         "Distributions": {
             "uuid": "31c24e10-a181-5473-b8eb-7969acd0382f",
-            "version": "^0.25.107"
+            "version": "^0.25.112"
         },
         "CairoMakie": {
             "uuid":"13f3f980-e62b-5c42-98c6-ff1f3baf88f0",
-            "version": "^0.12.5"
+            "version": "^0.12.15"
         },
         "PairPlots": {
             "uuid":"43a3c2be-4208-490b-832a-a21dcd55d7da",
-            "version": "^2.7.3"
+            "version": "^2.9.3"
         },
         "Pigeons": {
             "uuid":"0eb8d820-af6a-4919-95ae-11206f830c31",
-            "version": "0.4"
+            "version": "0.4.7"
         }
     }
 }

@@ -30,6 +30,9 @@ ObsPriorAstromONeil2019 = Octofitter.ObsPriorAstromONeil2019
 # Expose some libraries to the user
 Distributions = jl.Distributions
 
+jl.seval("global _obs")
+jl.seval("global _plnt")
+
 def Planet(
     name,
     basis,
@@ -70,7 +73,6 @@ def System(
             {priors}
         end (_obs...) (_plnt...)
     """
-    # _plnt
     sys = jl.seval(expr)
     return sys
 
@@ -79,15 +81,38 @@ def PlanetRelAstromLikelihood(**data):
         data[k] = jl_array(v)
     return Octofitter.PlanetRelAstromLikelihood(Octofitter.Table(**data))
 
-def PlanetRelativeRVLikelihood(instrument_names=None, **data):
+def PlanetRelativeRVLikelihood(*,jitter,instrument_name="", **data):
+    if 'gaussian_process' in data.keys():
+        raise ArgumentError("Gaussian processes are not supported through the python interface")
     for k,v in data.items():
         data[k] = jl_array(v)
-    return jl.OctofitterRadialVelocity.PlanetRelativeRVLikelihood(Octofitter.Table(**data), instrument_names=instrument_names)
+    return jl.OctofitterRadialVelocity.PlanetRelativeRVLikelihood(
+        Octofitter.Table(**data),
+        instrument_name=instrument_name,
+        jitter=jl.Symbol(jitter),
+    )
 
-def StarAbsoluteRVLikelihood(instrument_names=None, **data):
+def StarAbsoluteRVLikelihood(*,jitter,offset,instrument_name="", **data):
+    if 'gaussian_process' in data.keys():
+        raise ArgumentError("Gaussian processes are not supported through the python interface")
     for k,v in data.items():
         data[k] = jl_array(v)
-    return jl.OctofitterRadialVelocity.StarAbsoluteRVLikelihood(Octofitter.Table(**data), instrument_names=instrument_names)
+    return jl.OctofitterRadialVelocity.StarAbsoluteRVLikelihood(
+        Octofitter.Table(**data),
+        instrument_name=instrument_name,
+        jitter=jl.Symbol(jitter),
+        offset=jl.Symbol(offset),
+    )
+
+def MarginalizedStarAbsoluteRVLikelihood(*,jitter,instrument_name="", **data):
+    for k,v in data.items():
+        data[k] = jl_array(v)
+    return jl.OctofitterRadialVelocity.MarginalizedStarAbsoluteRVLikelihood(
+        Octofitter.Table(**data),
+        instrument_name=instrument_name,
+        jitter=jl.Symbol(jitter),
+    )
+
 
 def PhotometryLikelihood(**data):
     for k,v in data.items():
