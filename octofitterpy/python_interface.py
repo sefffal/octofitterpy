@@ -11,10 +11,10 @@ gaia_plx = Octofitter.gaia_plx
 HGCALikelihood = Octofitter.HGCALikelihood
 HipparcosIADLikelihood = Octofitter.HipparcosIADLikelihood
 LogDensityModel = Octofitter.LogDensityModel
-octofit = Octofitter.octofit
 octoquick = Octofitter.octoquick
 loadchain = Octofitter.loadchain
 savechain = Octofitter.savechain
+initialize = Octofitter.initialize_b
 mjd = Octofitter.mjd
 mjd2date = Octofitter.mjd2date
 years2mjd = Octofitter.years2mjd
@@ -150,6 +150,13 @@ def octocorner(*args, **kwargs):
         jl.Main.Makie.save(fname, fig)
         from IPython.display import Image
         return Image(filename=fname) 
+
+
+def octofit(*args, verbosity=-1, **kwargs):
+    if verbosity == -1:
+        verbosity = 0
+        print("HMC running... (to enable progress output, pass `verbosity=2`)")
+    return Octofitter.octofit(*args, verbosity=verbosity, **kwargs)
 
 def octofit_pigeons(*args, **kwargs):
     jl.seval("using Pigeons")
